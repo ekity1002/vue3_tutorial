@@ -16,6 +16,12 @@ r: # run frontend
 br:
 	@make b
 	@make r
+up:
+	docker-compose up -d
+down:
+	docker-compose down
+con:
+	docker-compose exec frontend /bin/ash
 # --------------------------------------------------------
 # docker commands
 export NONE_DOCKER_IMAGES=`docker images -f dangling=true -q`
