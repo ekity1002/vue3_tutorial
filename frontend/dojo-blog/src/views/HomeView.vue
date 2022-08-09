@@ -22,16 +22,27 @@
     <!-- watch -->
     <h1>watch</h1>
     <button @click="handleStopWatch">stop watching</button>
+
+    <!-- prop post-list-->
+    <div v-if="error">{{ error }}</div>
+    <div v-if="posts.length">
+      <PostList v-if="showPosts" :posts="posts"/>
+    </div>
+    <div v-else>Loading........</div>
+    <button @click="showPosts= !showPosts"> toggle posts</button>
+    <button @click="posts.pop()"> delete a post</button>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
+import PostList from '../components/PostList.vue'
+import getPosts from '../composables/getPosts'
 import { ref, reactive, computed, watch, watchEffect } from 'vue'
 
 export default {
   name: 'HomeView',
+  components: { PostList },
   setup() {
     console.log('setup')
 
@@ -76,7 +87,7 @@ export default {
     const stopWatch = watch(search, () => {
       console.log('watch func run...')
     })
-
+  
     const stopWatchEffect = watchEffect(() => {
       console.log('watch Effect...', search.value)
     })
@@ -86,9 +97,15 @@ export default {
       stopWatchEffect()
     }
 
+    // postLIst
+    const {posts, error, load } = getPosts()
+    load()
+
+    const showPosts = ref(true)
+
 
     return {name, age, handleClick, p, refprof, reactiveprof, update1, update2,
-     names, search, handleStopWatch}
+     names, search, handleStopWatch, posts, showPosts, error}
   },
 }
  
